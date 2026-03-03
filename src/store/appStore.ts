@@ -4,6 +4,7 @@ import type { Ingrediente } from "../domain/models/Ingrediente"
 import type { Producto } from "../domain/models/Producto"
 import type { Receta } from "../domain/models/Receta"
 import type { Pedido } from "../domain/models/Pedido"
+import type { PedidoItem } from "../domain/models/PedidoItem"
 import {
   clientesMock,
   ingredientesMock,
@@ -39,6 +40,7 @@ interface AppStore {
 
   // Pedidos
   agregarPedido: (p: Pedido) => void
+  agregarItemAPedido: (pedidoId: number, item: PedidoItem) => void
   eliminarPedido: (id: number) => void
 
   // Helpers
@@ -90,6 +92,12 @@ export const useAppStore = create<AppStore>((set, get) => ({
   // Pedidos
   agregarPedido: (p: Pedido): void =>{
     set((s) => ({ pedidos: [...s.pedidos, p] }))},
+  agregarItemAPedido: (pedidoId: number, item: PedidoItem): void =>{
+    const pedido = get().pedidos.find((p) => p.id === pedidoId);
+    if (pedido) {
+      pedido.agregarItem(item);
+      set((s) => ({ pedidos: [...s.pedidos] }));
+    }},
   eliminarPedido: (id): void =>{
     set((s) => ({ pedidos: s.pedidos.filter((p) => p.id !== id) }))},
 
