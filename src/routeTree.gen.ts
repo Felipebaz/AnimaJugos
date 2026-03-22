@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RentabilidadRouteImport } from './routes/rentabilidad'
 import { Route as ProductosRouteImport } from './routes/productos'
 import { Route as PedidosRouteImport } from './routes/pedidos'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListaComprasRouteImport } from './routes/lista-compras'
 import { Route as IngredientesRouteImport } from './routes/ingredientes'
 import { Route as ClientesRouteImport } from './routes/clientes'
@@ -30,6 +31,11 @@ const ProductosRoute = ProductosRouteImport.update({
 const PedidosRoute = PedidosRouteImport.update({
   id: '/pedidos',
   path: '/pedidos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListaComprasRoute = ListaComprasRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/clientes': typeof ClientesRoute
   '/ingredientes': typeof IngredientesRoute
   '/lista-compras': typeof ListaComprasRoute
+  '/login': typeof LoginRoute
   '/pedidos': typeof PedidosRoute
   '/productos': typeof ProductosRoute
   '/rentabilidad': typeof RentabilidadRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/clientes': typeof ClientesRoute
   '/ingredientes': typeof IngredientesRoute
   '/lista-compras': typeof ListaComprasRoute
+  '/login': typeof LoginRoute
   '/pedidos': typeof PedidosRoute
   '/productos': typeof ProductosRoute
   '/rentabilidad': typeof RentabilidadRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/clientes': typeof ClientesRoute
   '/ingredientes': typeof IngredientesRoute
   '/lista-compras': typeof ListaComprasRoute
+  '/login': typeof LoginRoute
   '/pedidos': typeof PedidosRoute
   '/productos': typeof ProductosRoute
   '/rentabilidad': typeof RentabilidadRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/ingredientes'
     | '/lista-compras'
+    | '/login'
     | '/pedidos'
     | '/productos'
     | '/rentabilidad'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/ingredientes'
     | '/lista-compras'
+    | '/login'
     | '/pedidos'
     | '/productos'
     | '/rentabilidad'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/ingredientes'
     | '/lista-compras'
+    | '/login'
     | '/pedidos'
     | '/productos'
     | '/rentabilidad'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   ClientesRoute: typeof ClientesRoute
   IngredientesRoute: typeof IngredientesRoute
   ListaComprasRoute: typeof ListaComprasRoute
+  LoginRoute: typeof LoginRoute
   PedidosRoute: typeof PedidosRoute
   ProductosRoute: typeof ProductosRoute
   RentabilidadRoute: typeof RentabilidadRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/pedidos'
       fullPath: '/pedidos'
       preLoaderRoute: typeof PedidosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lista-compras': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientesRoute: ClientesRoute,
   IngredientesRoute: IngredientesRoute,
   ListaComprasRoute: ListaComprasRoute,
+  LoginRoute: LoginRoute,
   PedidosRoute: PedidosRoute,
   ProductosRoute: ProductosRoute,
   RentabilidadRoute: RentabilidadRoute,

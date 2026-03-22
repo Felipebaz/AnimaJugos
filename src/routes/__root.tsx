@@ -1,4 +1,4 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
 	HomeIcon,
 	ClipboardDocumentListIcon,
@@ -7,7 +7,10 @@ import {
 	CubeIcon,
 	TagIcon,
 	UserGroupIcon,
+	ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../hooks/useAuth";
+import { useEffect } from "react";
 
 const navItems = [
 	{ to: "/", label: "Dashboard", icon: HomeIcon },
@@ -24,6 +27,37 @@ const catalogItems = [
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function RootLayout() {
+	const { session, isLoading, signOut } = useAuth();
+	const navigate = useNavigate();
+	const routerState = useRouterState();
+	const isLoginRoute = routerState.location.pathname === "/login";
+
+	useEffect(() => {
+		if (isLoading) return;
+		if (!session && !isLoginRoute) {
+			void navigate({ to: "/login" });
+		}
+		if (session && isLoginRoute) {
+			void navigate({ to: "/" });
+		}
+	}, [session, isLoading, isLoginRoute, navigate]);
+
+	if (isLoading) {
+		return (
+			<div className="flex h-screen items-center justify-center bg-gray-50">
+				<div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
+			</div>
+		);
+	}
+
+	if (isLoginRoute) {
+		return <Outlet />;
+	}
+
+	if (!session) {
+		return null;
+	}
+
 	return (
 		<div className="flex h-screen">
 			<aside className="flex w-60 flex-col bg-gray-900 text-gray-300">
@@ -56,6 +90,16 @@ function RootLayout() {
 						</Link>
 					))}
 				</nav>
+
+				<div className="border-t border-gray-700 px-3 py-3">
+					<button
+						className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-800 hover:text-white"
+						onClick={() => void signOut()}
+					>
+						<ArrowRightStartOnRectangleIcon className="h-5 w-5" />
+						Cerrar sesión
+					</button>
+				</div>
 			</aside>
 
 			<main className="flex-1 overflow-auto bg-gray-50 p-6">
