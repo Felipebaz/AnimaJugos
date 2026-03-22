@@ -47,7 +47,7 @@ const columnasPedido: Array<Column<FilaPedido>> = [
 ];
 
 function DashboardPage(): JSX.Element {
-	const { data: pedidos, isLoading: loadingPedidos } = usePedidos();
+	const { data: pedidos, isLoading: loadingPedidos, error: errorPedidos } = usePedidos();
 	const { data: recetas } = useRecetas();
 	const { data: ingredientes } = useIngredientes();
 	const { data: clientes } = useClientes();
@@ -162,6 +162,9 @@ function DashboardPage(): JSX.Element {
 
 	if (loadingPedidos) {
 		return <p className="p-4 text-sm text-gray-500">Cargando...</p>;
+	}
+	if (errorPedidos) {
+		return <p className="p-4 text-sm text-red-600">Error: {errorPedidos.message}</p>;
 	}
 
 	return (
